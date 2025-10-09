@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GAME REWARD - Jeu de Casse-Briques</title>
+    <title id="pageTitle">GAME REWAD </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Firebase SDK -->
@@ -101,6 +101,16 @@
         .user-actions {
             display: flex;
             gap: 15px;
+            align-items: center;
+        }
+        
+        .language-selector {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
         }
         
         .btn {
@@ -682,28 +692,140 @@
         .error-alert {
             color: #f44336;
         }
+        
+        .referral-section {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .referral-code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 1.2rem;
+            text-align: center;
+            border: 1px dashed #FFD700;
+        }
+        
+        .copy-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .referral-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .referral-stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .referral-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        
+        .no-tokens-message {
+            background: rgba(255, 152, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid rgba(255, 152, 0, 0.5);
+        }
+        /* CORRECTIONS HEADER - À AJOUTER À LA FIN DU STYLE */
+.user-panel {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#authButtons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+/* Fix pour l'ordre d'affichage */
+.user-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .user-actions {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+    
+    .language-selector {
+        order: 1;
+    }
+    
+    #authButtons {
+        order: 2;
+        flex-wrap: wrap;
+    }
+}
     </style>
+    
 </head>
+
 <body>
+	<script type="text/javascript">
+	atOptions = {
+		'key' : 'ec8a122370809254d0799e5b220bfa3f',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//absolvedowntowninteger.com/ec8a122370809254d0799e5b220bfa3f/invoke.js"></script>
     <div class="container">
         <header>
             <div class="logo">
                 <i class="fas fa-gamepad"></i>
-                <h1>GAME REWARD</h1>
+                <h1 id="appTitle">Brick Breaker</h1>
             </div>
             <div class="user-actions">
+                <select class="language-selector" id="languageSelector">
+                    <option value="fr">Français</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="de">Deutsch</option>
+                </select>
                 <div id="authButtons">
                     <button class="btn btn-primary" id="loginBtn">
-                        <i class="fas fa-sign-in-alt"></i> Connexion
+                        <i class="fas fa-sign-in-alt"></i> <span id="loginText">Connexion</span>
                     </button>
                     <button class="btn btn-secondary" id="registerBtn">
-                        <i class="fas fa-user-plus"></i> Inscription
+                        <i class="fas fa-user-plus"></i> <span id="registerText">Inscription</span>
                     </button>
                 </div>
                 <div class="user-panel" id="userPanel">
                     <div class="user-info">
                         <div class="user-name" id="userName">Joueur</div>
-                        <div class="user-level">Jetons: <span id="userTokens">0</span></div>
+                        <div class="user-level"><span id="tokensText">Jetons</span>: <span id="userTokens">0</span></div>
                     </div>
                     <div class="avatar">
                         <i class="fas fa-user"></i>
@@ -714,21 +836,31 @@
                 </div>
             </div>
         </header>
-        
+        <script type="text/javascript">
+	atOptions = {
+		'key' : 'ec8a122370809254d0799e5b220bfa3f',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//absolvedowntowninteger.com/ec8a122370809254d0799e5b220bfa3f/invoke.js"></script>
         <div class="main-content">
             <section class="game-container">
                 <div class="game-info">
                     <div class="info-item">
+                    
                         <div class="info-value" id="score">0</div>
-                        <div class="info-label">Score</div>
+                        <div class="info-label" id="scoreLabel">Score</div>
                     </div>
                     <div class="info-item">
                         <div class="info-value" id="level">1</div>
-                        <div class="info-label">Niveau</div>
+                        <div class="info-label" id="levelLabel">Niveau</div>
                     </div>
                     <div class="info-item">
                         <div class="info-value" id="lives">3</div>
-                        <div class="info-label">Vies</div>
+                        <div class="info-label" id="livesLabel">Vies</div>
                     </div>
                 </div>
                 
@@ -741,38 +873,48 @@
                 
                 <div class="game-controls">
                     <button class="btn btn-primary control-btn" id="startBtn">
-                        <i class="fas fa-play"></i> Commencer
+                        <i class="fas fa-play"></i> <span id="startText">Commencer</span>
                     </button>
                     <button class="btn btn-secondary control-btn" id="pauseBtn">
-                        <i class="fas fa-pause"></i> Pause
+                        <i class="fas fa-pause"></i> <span id="pauseText">Pause</span>
                     </button>
                     <button class="btn btn-secondary control-btn" id="resetBtn">
-                        <i class="fas fa-redo"></i> Recommencer
+                        <i class="fas fa-redo"></i> <span id="resetText">Recommencer</span>
                     </button>
                 </div>
                 
                 <div class="instructions">
-                    <h3>Comment jouer:</h3>
+                    <h3 id="howToPlayTitle">Comment jouer:</h3>
                     <ul>
-                        <li>Utilisez les touches ← et → ou les boutons pour déplacer la raquette</li>
-                        <li>Cassez toutes les briques pour passer au niveau suivant</li>
-                        <li>Chaque brique cassée = 1 point = 0.05 jetons</li>
-                        <li>Récupérez vos jetons après avoir joué pour rejouer</li>
+                        <li id="instruction1">Utilisez les touches ← et → ou les boutons pour déplacer la raquette</li>
+                        <li id="instruction2">Cassez toutes les briques pour passer au niveau suivant</li>
+                        <li id="instruction3">Chaque brique cassée = 1 point = 0.05 jetons</li>
+                        <li id="instruction4">Récupérez vos jetons après avoir joué pour rejouer</li>
                     </ul>
                 </div>
                 
                 <div class="game-over" id="gameOverScreen">
                     <div class="game-over-content">
-                        <h2>Partie Terminée</h2>
-                        <p>Score final: <span id="finalScore">0</span></p>
-                        <p>Jetons gagnés: <span id="tokensEarned">0</span></p>
+                    	<script type="text/javascript">
+	atOptions = {
+		'key' : 'ec8a122370809254d0799e5b220bfa3f',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//absolvedowntowninteger.com/ec8a122370809254d0799e5b220bfa3f/invoke.js"></script>
+                        <h2 id="gameOverTitle">Partie Terminée</h2>
+                        <p id="finalScoreText">Score final: <span id="finalScore">0</span></p>
+                        <p id="tokensEarnedText">Jetons gagnés: <span id="tokensEarned">0</span></p>
                         
                         <div class="game-over-buttons">
                             <button class="game-over-btn restart-btn" id="restartBtn">
-                                <i class="fas fa-redo"></i> Rejouer
+                                <i class="fas fa-redo"></i> <span id="playAgainText">Rejouer</span>
                             </button>
                             <button class="game-over-btn recover-game-over-btn" id="recoverGameOverBtn" disabled>
-                                <i class="fas fa-gem"></i> Récupérer les Jetons
+                                <i class="fas fa-gem"></i> <span id="recoverTokensText">Récupérer les Jetons</span>
                             </button>
                         </div>
                     </div>
@@ -781,60 +923,96 @@
             
             <section class="stats-area">
                 <div class="token-display">
-                    <div class="token-label">Vos Jetons</div>
+                    <div class="token-label" id="yourTokensText">Vos Jetons</div>
                     <div class="token-count" id="tokenCount">0</div>
-                    <div class="token-label">1 brique = 1 point = 0.05 jetons</div>
+                    <div class="token-label" id="tokenRateText">1 brique = 1 point = 0.05 jetons</div>
                 </div>
                 
                 <div class="recover-section">
                     <button class="recover-btn" id="recoverBtn" disabled>
-                        <i class="fas fa-gem"></i> Récupérer les Jetons
+                        <i class="fas fa-gem"></i> <span id="recoverButtonText">Récupérer les Jetons</span>
                     </button>
+                    <div class="no-tokens-message" id="noTokensMessage" style="display: none;">
+                        <i class="fas fa-info-circle"></i> <span id="noTokensText">Aucun jeton à récupérer pour le moment</span>
+                    </div>
                     <div class="recover-message" id="recoverMessage">
-                        <i class="fas fa-check-circle"></i> Jetons récupérés avec succès!
+                        <i class="fas fa-check-circle"></i> <span id="recoverSuccessText">Jetons récupérés avec succès!</span>
                     </div>
                 </div>
                 
-                <h2>Statistiques de Jeu</h2>
+                <h2 id="gameStatsTitle">Statistiques de Jeu</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-label">Meilleur Score</div>
+                        <div class="stat-label" id="bestScoreLabel">Meilleur Score</div>
                         <div class="stat-value" id="bestScore">0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Parties Jouées</div>
+                        <div class="stat-label" id="gamesPlayedLabel">Parties Jouées</div>
                         <div class="stat-value" id="gamesPlayed">0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Jetons Récupérés</div>
+                        <div class="stat-label" id="tokensRecoveredLabel">Jetons Récupérés</div>
                         <div class="stat-value" id="tokensRecovered">0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Niveau Max</div>
+                        <div class="stat-label" id="maxLevelLabel">Niveau Max</div>
                         <div class="stat-value" id="maxLevel">1</div>
                     </div>
                 </div>
                 
                 <div class="sponsor-info" id="sponsorInfo" style="display: none;">
-                    <h3><i class="fas fa-user-friends"></i> Programme de Parrainage</h3>
-                    <p>Parrain: <span id="sponsorName">-</span></p>
-                    <p>Votre parrain gagne 1 jeton + 5% de vos gains!</p>
+                    <h3><i class="fas fa-user-friends"></i> <span id="sponsorProgramTitle">Programme de Parrainage</span></h3>
+                    <p id="yourSponsorText">Votre parrain: <span id="sponsorName">-</span></p>
+                    <p id="sponsorBonusText">Votre parrain gagne 1 jeton + 5% de vos gains!</p>
+                </div>
+                
+                <div class="referral-section" id="referralSection" style="display: none;">
+                    <h3><i class="fas fa-share-alt"></i> <span id="yourReferralTitle">Votre Code de Parrainage</span></h3>
+                    <div class="referral-code" id="referralCode">-</div>
+                    <button class="copy-btn" id="copyReferralBtn">
+                        <i class="fas fa-copy"></i> <span id="copyCodeText">Copier le code</span>
+                    </button>
+                    <p id="referralInfoText">Partagez ce code avec vos amis et gagnez 1 jeton + 5% de leurs gains!</p>
+                    
+                    
+                    <div class="referral-stats">
+                        <div class="referral-stat">
+                            <div class="referral-stat-value" id="referralCount">0</div>
+                            <div class="stat-label" id="referralsLabel">Filleuls</div>
+                        </div>
+                        <div class="referral-stat">
+                            <div class="referral-stat-value" id="referralEarnings">0</div>
+                            <div class="stat-label" id="earningsLabel">Gains</div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
         
         <section class="leaderboard">
-            <h2>Classement des Joueurs</h2>
+            <h2 id="leaderboardTitle">Classement des Joueurs</h2>
             <div class="loading" id="leaderboardLoading">
-                <i class="fas fa-spinner fa-spin"></i> Chargement...
+                <i class="fas fa-spinner fa-spin"></i> <span id="loadingText">Chargement...</span>
             </div>
             <div id="leaderboardList">
                 <!-- Le classement sera chargé dynamiquement -->
-            </div>
+          
+  </div>
+  
+  <script type="text/javascript">
+	atOptions = {
+		'key' : 'ec8a122370809254d0799e5b220bfa3f',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//absolvedowntowninteger.com/ec8a122370809254d0799e5b220bfa3f/invoke.js"></script>
         </section>
         
         <footer>
-            <p>GAME REWARD  &copy; 2025- 1 brique = 1 point = 0.05 jetons</p>
+            <p id="footerText">GAME REWARD&copy; 2025 - 1 brique = 1 point = 0.05 jetons</p>
         </footer>
     </div>
     
@@ -843,56 +1021,56 @@
         <div class="modal-content">
             <button class="close-modal" id="closeModal">&times;</button>
             <div class="modal-tabs">
-                <div class="tab active" data-tab="login">Connexion</div>
-                <div class="tab" data-tab="register">Inscription</div>
+                <div class="tab active" data-tab="login" id="loginTabText">Connexion</div>
+                <div class="tab" data-tab="register" id="registerTabText">Inscription</div>
             </div>
             
             <div class="tab-content active" id="loginTab">
-                <h2>Connexion</h2>
+                <h2 id="loginTitle">Connexion</h2>
                 <div class="form-group">
-                    <label for="loginEmail">Email:</label>
+                    <label for="loginEmail" id="emailLabel">Email:</label>
                     <input type="email" id="loginEmail" placeholder="Votre adresse email">
                 </div>
                 <div class="form-group">
-                    <label for="loginPassword">Mot de passe:</label>
+                    <label for="loginPassword" id="passwordLabel">Mot de passe:</label>
                     <input type="password" id="loginPassword" placeholder="Votre mot de passe">
                 </div>
                 <div class="error-message" id="loginError"></div>
                 <button class="modal-btn" id="submitLogin">
-                    <i class="fas fa-sign-in-alt"></i> Se connecter
+                    <i class="fas fa-sign-in-alt"></i> <span id="connectText">Se connecter</span>
                 </button>
             </div>
             
             <div class="tab-content" id="registerTab">
-                <h2>Inscription</h2>
+                <h2 id="registerTitle">Inscription</h2>
                 <div class="form-group">
-                    <label for="registerUsername">Nom d'utilisateur:</label>
+                    <label for="registerUsername" id="usernameLabel">Nom d'utilisateur:</label>
                     <input type="text" id="registerUsername" placeholder="Choisissez un nom unique">
                     <div class="username-feedback" id="usernameFeedback"></div>
                 </div>
                 <div class="form-group">
-                    <label for="registerEmail">Email:</label>
+                    <label for="registerEmail" id="emailLabel2">Email:</label>
                     <input type="email" id="registerEmail" placeholder="Votre adresse email">
                 </div>
                 <div class="form-group">
-                    <label for="registerPassword">Mot de passe:</label>
+                    <label for="registerPassword" id="passwordLabel2">Mot de passe:</label>
                     <input type="password" id="registerPassword" placeholder="Créez un mot de passe (min. 6 caractères)">
                 </div>
                 <div class="form-group">
-                    <label for="confirmPassword">Confirmer le mot de passe:</label>
+                    <label for="confirmPassword" id="confirmPasswordLabel">Confirmer le mot de passe:</label>
                     <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe">
                 </div>
                 <div class="form-group">
-                    <label for="sponsorUsername">Nom du parrain (optionnel):</label>
+                    <label for="sponsorUsername" id="sponsorLabel">Nom du parrain (optionnel):</label>
                     <input type="text" id="sponsorUsername" placeholder="Username de votre parrain">
                     <div class="username-feedback" id="sponsorFeedback"></div>
                     <div class="sponsor-bonus">
-                        <i class="fas fa-gift"></i> Bonus: 1 jeton offert avec un code parrain!
+                        <i class="fas fa-gift"></i> <span id="bonusText">Bonus: 1 jeton offert avec un code parrain!</span>
                     </div>
                 </div>
                 <div class="error-message" id="registerError"></div>
                 <button class="modal-btn" id="submitRegister">
-                    <i class="fas fa-user-plus"></i> Créer un compte
+                    <i class="fas fa-user-plus"></i> <span id="createAccountText">Créer un compte</span>
                 </button>
             </div>
         </div>
@@ -919,6 +1097,7 @@
         let userLoggedIn = false;
         let currentUser = null;
         let currentUserData = null;
+        let currentLanguage = 'fr';
         
         // Variables du jeu
         let canvas, ctx;
@@ -937,6 +1116,7 @@
         const levelElement = document.getElementById('level');
         const livesElement = document.getElementById('lives');
         const recoverBtn = document.getElementById('recoverBtn');
+        const noTokensMessage = document.getElementById('noTokensMessage');
         const recoverMessage = document.getElementById('recoverMessage');
         const bestScoreElement = document.getElementById('bestScore');
         const gamesPlayedElement = document.getElementById('gamesPlayed');
@@ -978,6 +1158,268 @@
         const alertModal = document.getElementById('alertModal');
         const alertMessage = document.getElementById('alertMessage');
         const closeAlert = document.getElementById('closeAlert');
+        const languageSelector = document.getElementById('languageSelector');
+        const referralSection = document.getElementById('referralSection');
+        const referralCode = document.getElementById('referralCode');
+        const copyReferralBtn = document.getElementById('copyReferralBtn');
+        const referralCount = document.getElementById('referralCount');
+        const referralEarnings = document.getElementById('referralEarnings');
+
+        // Dictionnaire de traduction
+        const translations = {
+            fr: {
+                appTitle: "GAME REWARD",
+                loginText: "Connexion",
+                registerText: "Inscription",
+                tokensText: "Jetons",
+                scoreLabel: "Score",
+                levelLabel: "Niveau",
+                livesLabel: "Vies",
+                startText: "Commencer",
+                pauseText: "Pause",
+                resetText: "Recommencer",
+                howToPlayTitle: "Comment jouer:",
+                instruction1: "Utilisez les touches ← et → ou les boutons pour déplacer la raquette",
+                instruction2: "Cassez toutes les briques pour passer au niveau suivant",
+                instruction3: "Chaque brique cassée = 1 point = 0.05 jetons",
+                instruction4: "Récupérez vos jetons après avoir joué pour rejouer",
+                gameOverTitle: "Partie Terminée",
+                finalScoreText: "Score final:",
+                tokensEarnedText: "Jetons gagnés:",
+                playAgainText: "Rejouer",
+                recoverTokensText: "Récupérer les Jetons",
+                yourTokensText: "Vos Jetons",
+                tokenRateText: "1 brique = 1 point = 0.05 jetons",
+                recoverButtonText: "Récupérer les Jetons",
+                noTokensText: "Aucun jeton à récupérer pour le moment",
+                recoverSuccessText: "Jetons récupérés avec succès!",
+                gameStatsTitle: "Statistiques de Jeu",
+                bestScoreLabel: "Meilleur Score",
+                gamesPlayedLabel: "Parties Jouées",
+                tokensRecoveredLabel: "Jetons Récupérés",
+                maxLevelLabel: "Niveau Max",
+                sponsorProgramTitle: "Programme de Parrainage",
+                yourSponsorText: "Votre parrain:",
+                sponsorBonusText: "Votre parrain gagne 1 jeton + 5% de vos gains!",
+                yourReferralTitle: "Votre Code de Parrainage",
+                copyCodeText: "Copier le code",
+                referralInfoText: "Partagez ce code avec vos amis et gagnez 1 jeton + 5% de leurs gains!",
+                referralsLabel: "Filleuls",
+                earningsLabel: "Gains",
+                leaderboardTitle: "Classement des Joueurs",
+                loadingText: "Chargement...",
+                footerText: "Brick Breaker &copy; 2023 - 1 brique = 1 point = 0.05 jetons",
+                loginTabText: "Connexion",
+                registerTabText: "Inscription",
+                loginTitle: "Connexion",
+                emailLabel: "Email:",
+                passwordLabel: "Mot de passe:",
+                connectText: "Se connecter",
+                registerTitle: "Inscription",
+                usernameLabel: "Nom d'utilisateur:",
+                emailLabel2: "Email:",
+                passwordLabel2: "Mot de passe:",
+                confirmPasswordLabel: "Confirmer le mot de passe:",
+                sponsorLabel: "Nom du parrain (optionnel):",
+                bonusText: "Bonus: 1 jeton offert avec un code parrain!",
+                createAccountText: "Créer un compte",
+                noTokensAlert: "Aucun jeton à récupérer pour le moment!",
+                mustRecoverAlert: "Vous devez récupérer vos jetons avant de rejouer!",
+                registerSuccess: "Compte créé avec succès! Bienvenue sur Brick Breaker!",
+                loginSuccess: "Connexion réussie! Bienvenue ",
+                logoutSuccess: "Vous avez été déconnecté!",
+                tokensRecoveredAlert: "Jetons récupérés avec succès!"
+            },
+            en: {
+                appTitle: "Brick Breaker - Brick Breaking Game",
+                loginText: "Login",
+                registerText: "Register",
+                tokensText: "Tokens",
+                scoreLabel: "Score",
+                levelLabel: "Level",
+                livesLabel: "Lives",
+                startText: "Start",
+                pauseText: "Pause",
+                resetText: "Restart",
+                howToPlayTitle: "How to play:",
+                instruction1: "Use ← and → keys or buttons to move the paddle",
+                instruction2: "Break all bricks to advance to the next level",
+                instruction3: "Each brick broken = 1 point = 0.05 tokens",
+                instruction4: "Recover your tokens after playing to play again",
+                gameOverTitle: "Game Over",
+                finalScoreText: "Final score:",
+                tokensEarnedText: "Tokens earned:",
+                playAgainText: "Play Again",
+                recoverTokensText: "Recover Tokens",
+                yourTokensText: "Your Tokens",
+                tokenRateText: "1 brick = 1 point = 0.05 tokens",
+                recoverButtonText: "Recover Tokens",
+                noTokensText: "No tokens to recover at the moment",
+                recoverSuccessText: "Tokens recovered successfully!",
+                gameStatsTitle: "Game Statistics",
+                bestScoreLabel: "Best Score",
+                gamesPlayedLabel: "Games Played",
+                tokensRecoveredLabel: "Tokens Recovered",
+                maxLevelLabel: "Max Level",
+                sponsorProgramTitle: "Referral Program",
+                yourSponsorText: "Your sponsor:",
+                sponsorBonusText: "Your sponsor earns 1 token + 5% of your earnings!",
+                yourReferralTitle: "Your Referral Code",
+                copyCodeText: "Copy code",
+                referralInfoText: "Share this code with your friends and earn 1 token + 5% of their earnings!",
+                referralsLabel: "Referrals",
+                earningsLabel: "Earnings",
+                leaderboardTitle: "Player Leaderboard",
+                loadingText: "Loading...",
+                footerText: "Brick Breaker &copy; 2023 - 1 brick = 1 point = 0.05 tokens",
+                loginTabText: "Login",
+                registerTabText: "Register",
+                loginTitle: "Login",
+                emailLabel: "Email:",
+                passwordLabel: "Password:",
+                connectText: "Sign In",
+                registerTitle: "Register",
+                usernameLabel: "Username:",
+                emailLabel2: "Email:",
+                passwordLabel2: "Password:",
+                confirmPasswordLabel: "Confirm Password:",
+                sponsorLabel: "Sponsor username (optional):",
+                bonusText: "Bonus: 1 free token with a sponsor code!",
+                createAccountText: "Create Account",
+                noTokensAlert: "No tokens to recover at the moment!",
+                mustRecoverAlert: "You must recover your tokens before playing again!",
+                registerSuccess: "Account created successfully! Welcome to Brick Breaker!",
+                loginSuccess: "Login successful! Welcome ",
+                logoutSuccess: "You have been logged out!",
+                tokensRecoveredAlert: "Tokens recovered successfully!"
+            },
+            es: {
+                appTitle: "Brick Breaker - Juego de Romper Ladrillos",
+                loginText: "Iniciar Sesión",
+                registerText: "Registrarse",
+                tokensText: "Fichas",
+                scoreLabel: "Puntuación",
+                levelLabel: "Nivel",
+                livesLabel: "Vidas",
+                startText: "Comenzar",
+                pauseText: "Pausa",
+                resetText: "Reiniciar",
+                howToPlayTitle: "Cómo jugar:",
+                instruction1: "Usa las teclas ← y → o los botones para mover la paleta",
+                instruction2: "Rompe todos los ladrillos para pasar al siguiente nivel",
+                instruction3: "Cada ladrillo roto = 1 punto = 0.05 fichas",
+                instruction4: "Recupera tus fichas después de jugar para volver a jugar",
+                gameOverTitle: "Juego Terminado",
+                finalScoreText: "Puntuación final:",
+                tokensEarnedText: "Fichas ganadas:",
+                playAgainText: "Jugar Otra Vez",
+                recoverTokensText: "Recuperar Fichas",
+                yourTokensText: "Tus Fichas",
+                tokenRateText: "1 ladrillo = 1 punto = 0.05 fichas",
+                recoverButtonText: "Recuperar Fichas",
+                noTokensText: "No hay fichas para recuperar en este momento",
+                recoverSuccessText: "¡Fichas recuperadas con éxito!",
+                gameStatsTitle: "Estadísticas del Juego",
+                bestScoreLabel: "Mejor Puntuación",
+                gamesPlayedLabel: "Partidas Jugadas",
+                tokensRecoveredLabel: "Fichas Recuperadas",
+                maxLevelLabel: "Nivel Máximo",
+                sponsorProgramTitle: "Programa de Referidos",
+                yourSponsorText: "Tu patrocinador:",
+                sponsorBonusText: "¡Tu patrocinador gana 1 ficha + 5% de tus ganancias!",
+                yourReferralTitle: "Tu Código de Referido",
+                copyCodeText: "Copiar código",
+                referralInfoText: "¡Comparte este código con tus amigos y gana 1 ficha + 5% de sus ganancias!",
+                referralsLabel: "Referidos",
+                earningsLabel: "Ganancias",
+                leaderboardTitle: "Clasificación de Jugadores",
+                loadingText: "Cargando...",
+                footerText: "Brick Breaker &copy; 2023 - 1 ladrillo = 1 punto = 0.05 fichas",
+                loginTabText: "Iniciar Sesión",
+                registerTabText: "Registrarse",
+                loginTitle: "Iniciar Sesión",
+                emailLabel: "Email:",
+                passwordLabel: "Contraseña:",
+                connectText: "Iniciar Sesión",
+                registerTitle: "Registrarse",
+                usernameLabel: "Nombre de usuario:",
+                emailLabel2: "Email:",
+                passwordLabel2: "Contraseña:",
+                confirmPasswordLabel: "Confirmar Contraseña:",
+                sponsorLabel: "Nombre del patrocinador (opcional):",
+                bonusText: "¡Bonus: 1 ficha gratis con código de patrocinador!",
+                createAccountText: "Crear Cuenta",
+                noTokensAlert: "¡No hay fichas para recuperar en este momento!",
+                mustRecoverAlert: "¡Debes recuperar tus fichas antes de volver a jugar!",
+                registerSuccess: "¡Cuenta creada con éxito! Bienvenido a Brick Breaker!",
+                loginSuccess: "¡Inicio de sesión exitoso! Bienvenido ",
+                logoutSuccess: "¡Has cerrado sesión!",
+                tokensRecoveredAlert: "¡Fichas recuperadas con éxito!"
+            },
+            de: {
+                appTitle: "Brick Breaker - Brick Breaker Spiel",
+                loginText: "Anmelden",
+                registerText: "Registrieren",
+                tokensText: "Tokens",
+                scoreLabel: "Punkte",
+                levelLabel: "Level",
+                livesLabel: "Leben",
+                startText: "Starten",
+                pauseText: "Pause",
+                resetText: "Neustart",
+                howToPlayTitle: "Spielanleitung:",
+                instruction1: "Verwende ← und → Tasten oder Buttons, um das Paddel zu bewegen",
+                instruction2: "Zerstöre alle Steine, um zum nächsten Level zu gelangen",
+                instruction3: "Jeder zerstörte Stein = 1 Punkt = 0.05 Tokens",
+                instruction4: "Hole deine Tokens nach dem Spielen ab, um erneut zu spielen",
+                gameOverTitle: "Spiel Beendet",
+                finalScoreText: "Endpunktzahl:",
+                tokensEarnedText: "Erhaltene Tokens:",
+                playAgainText: "Nochmal Spielen",
+                recoverTokensText: "Tokens Abholen",
+                yourTokensText: "Deine Tokens",
+                tokenRateText: "1 Stein = 1 Punkt = 0.05 Tokens",
+                recoverButtonText: "Tokens Abholen",
+                noTokensText: "Derzeit keine Tokens zum Abholen verfügbar",
+                recoverSuccessText: "Tokens erfolgreich abgeholt!",
+                gameStatsTitle: "Spielstatistiken",
+                bestScoreLabel: "Beste Punktzahl",
+                gamesPlayedLabel: "Gespielte Spiele",
+                tokensRecoveredLabel: "Abgeholte Tokens",
+                maxLevelLabel: "Max Level",
+                sponsorProgramTitle: "Partnerprogramm",
+                yourSponsorText: "Dein Sponsor:",
+                sponsorBonusText: "Dein Sponsor erhält 1 Token + 5% deiner Einnahmen!",
+                yourReferralTitle: "Dein Empfehlungscode",
+                copyCodeText: "Code kopieren",
+                referralInfoText: "Teile diesen Code mit deinen Freunden und verdiene 1 Token + 5% ihrer Einnahmen!",
+                referralsLabel: "Empfehlungen",
+                earningsLabel: "Einnahmen",
+                leaderboardTitle: "Bestenliste",
+                loadingText: "Lädt...",
+                footerText: "Brick Breaker &copy; 2023 - 1 Stein = 1 Punkt = 0.05 Tokens",
+                loginTabText: "Anmelden",
+                registerTabText: "Registrieren",
+                loginTitle: "Anmelden",
+                emailLabel: "Email:",
+                passwordLabel: "Passwort:",
+                connectText: "Anmelden",
+                registerTitle: "Registrieren",
+                usernameLabel: "Benutzername:",
+                emailLabel2: "Email:",
+                passwordLabel2: "Passwort:",
+                confirmPasswordLabel: "Passwort bestätigen:",
+                sponsorLabel: "Sponsor Benutzername (optional):",
+                bonusText: "Bonus: 1 kostenloser Token mit einem Sponsor-Code!",
+                createAccountText: "Konto Erstellen",
+                noTokensAlert: "Derzeit keine Tokens zum Abholen verfügbar!",
+                mustRecoverAlert: "Du musst deine Tokens abholen, bevor du erneut spielen kannst!",
+                registerSuccess: "Konto erfolgreich erstellt! Willkommen bei Brick Breaker!",
+                loginSuccess: "Anmeldung erfolgreich! Willkommen ",
+                logoutSuccess: "Du wurdest abgemeldet!",
+                tokensRecoveredAlert: "Tokens erfolgreich abgeholt!"
+            }
+        };
 
         // Initialisation Firebase
         let auth, db;
@@ -985,9 +1427,45 @@
 
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
+            // Détecter la langue de l'utilisateur
+            detectUserLanguage();
+            
             // Attendre que Firebase soit chargé
             setTimeout(initializeApp, 100);
         });
+
+        function detectUserLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            const langCode = browserLang.split('-')[0];
+            
+            if (translations[langCode]) {
+                currentLanguage = langCode;
+            } else {
+                currentLanguage = 'fr'; // Français par défaut
+            }
+            
+            languageSelector.value = currentLanguage;
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const lang = translations[currentLanguage];
+            
+            // Mettre à jour tous les textes
+            document.querySelectorAll('[id]').forEach(element => {
+                const id = element.id;
+                if (lang[id]) {
+                    if (element.tagName === 'INPUT' && element.type !== 'button') {
+                        element.placeholder = lang[id];
+                    } else {
+                        element.textContent = lang[id];
+                    }
+                }
+            });
+            
+            // Mettre à jour le titre de la page
+            document.title = lang.appTitle;
+        }
 
         function initializeApp() {
             auth = window.firebaseAuth;
@@ -1051,6 +1529,15 @@
             submitLogin.addEventListener('click', submitLoginForm);
             submitRegister.addEventListener('click', submitRegisterForm);
             logoutBtn.addEventListener('click', logoutUser);
+            
+            // Événement de changement de langue
+            languageSelector.addEventListener('change', function() {
+                currentLanguage = this.value;
+                updateLanguage();
+            });
+            
+            // Événement de copie du code de parrainage
+            copyReferralBtn.addEventListener('click', copyReferralCode);
             
             // Vérification du nom d'utilisateur en temps réel
             registerUsername.addEventListener('input', checkUsernameAvailability);
@@ -1117,6 +1604,14 @@
             gameContainer.scrollIntoView({ 
                 behavior: 'smooth',
                 block: 'start'
+            });
+        }
+
+        // Fonction pour copier le code de parrainage
+        function copyReferralCode() {
+            const code = referralCode.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                showModalAlert(translations[currentLanguage].copyCodeText + ' copié!', 'success');
             });
         }
 
@@ -1367,12 +1862,13 @@
             tokensEarnedElement.textContent = tokensEarned.toFixed(2);
             gameOverScreen.style.display = 'flex';
             
-            // Activer les boutons de récupération
-            recoverBtn.disabled = false;
-            recoverGameOverBtn.disabled = false;
+            // Activer les boutons de récupération seulement s'il y a des jetons
+            const hasTokens = tokens > 0;
+            recoverBtn.disabled = !hasTokens;
+            recoverGameOverBtn.disabled = !hasTokens;
             
             // Désactiver le bouton de démarrage si l'utilisateur a des jetons non récupérés
-            startBtn.disabled = tokens > 0;
+            startBtn.disabled = hasTokens;
             
             // Sauvegarder les données utilisateur
             saveUserData();
@@ -1411,7 +1907,7 @@
             
             // Vérifier si l'utilisateur a des jetons non récupérés
             if (tokens > 0) {
-                showModalAlert("Vous devez récupérer vos jetons avant de rejouer!", 'warning');
+                showModalAlert(translations[currentLanguage].mustRecoverAlert, 'warning');
                 scrollToRecoverButton();
                 return;
             }
@@ -1463,32 +1959,66 @@
                 updateTokenDisplay();
                 tokensRecoveredElement.textContent = tokensRecovered.toFixed(2);
                 recoverBtn.disabled = true;
+                recoverGameOverBtn.disabled = true;
+                
+                // Masquer le message "aucun jeton" et afficher le message de succès
+                noTokensMessage.style.display = 'none';
+                recoverMessage.style.display = 'block';
                 
                 // Réactiver le bouton de démarrage
                 startBtn.disabled = false;
                 
                 // Afficher le message de confirmation dans une modal
-                showModalAlert('Jetons récupérés avec succès!', 'success');
+                showModalAlert(translations[currentLanguage].tokensRecoveredAlert, 'success');
                 
                 saveUserData();
                 
                 // Faire défiler vers le jeu
                 setTimeout(scrollToGame, 1000);
+                
+                // Masquer le message de succès après 3 secondes
+                setTimeout(() => {
+                    recoverMessage.style.display = 'none';
+                }, 3000);
+            } else {
+                // Afficher le message "aucun jeton à récupérer"
+                noTokensMessage.style.display = 'block';
+                recoverMessage.style.display = 'none';
+                
+                // Masquer le message après 3 secondes
+                setTimeout(() => {
+                    noTokensMessage.style.display = 'none';
+                }, 3000);
             }
         }
         
         // Récupérer les jetons depuis l'écran de fin de partie
         function recoverTokensFromGameOver() {
-            recoverTokens();
-            // Masquer l'écran de fin de partie après récupération
-            gameOverScreen.style.display = 'none';
-            recoverGameOverBtn.disabled = true;
+            if (tokens > 0) {
+                recoverTokens();
+                // Masquer l'écran de fin de partie après récupération
+                gameOverScreen.style.display = 'none';
+            } else {
+                showModalAlert(translations[currentLanguage].noTokensAlert, 'warning');
+            }
         }
         
         // Mettre à jour l'affichage des jetons
         function updateTokenDisplay() {
             tokenCountElement.textContent = tokens.toFixed(2);
             userTokensElement.textContent = tokens.toFixed(2);
+            
+            // Mettre à jour l'état du bouton de récupération
+            const hasTokens = tokens > 0;
+            recoverBtn.disabled = !hasTokens;
+            
+            // Afficher ou masquer le message "aucun jeton"
+            if (!hasTokens) {
+                noTokensMessage.style.display = 'block';
+                recoverMessage.style.display = 'none';
+            } else {
+                noTokensMessage.style.display = 'none';
+            }
         }
         
         // Système d'authentification Firebase
@@ -1524,7 +2054,7 @@
             try {
                 const userCredential = await firebaseFunctions.signInWithEmailAndPassword(auth, email, password);
                 closeAuthModal();
-                showModalAlert('Connexion réussie! Bienvenue ' + email + '!', 'success');
+                showModalAlert(translations[currentLanguage].loginSuccess + email + '!', 'success');
             } catch (error) {
                 showError(loginError, getAuthErrorMessage(error.code));
             }
@@ -1576,19 +2106,19 @@
             try {
                 // Afficher l'état de chargement
                 const originalText = submitRegister.innerHTML;
-                submitRegister.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création en cours...';
+                submitRegister.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + translations[currentLanguage].createAccountText + '...';
                 submitRegister.disabled = true;
                 
                 const userCredential = await firebaseFunctions.createUserWithEmailAndPassword(auth, email, password);
                 // Créer le profil utilisateur dans Firestore
                 await createUserProfile(userCredential.user, email, username, sponsor || null);
                 closeAuthModal();
-                showModalAlert('Compte créé avec succès! Bienvenue sur GAME REWARD !', 'success');
+                showModalAlert(translations[currentLanguage].registerSuccess, 'success');
             } catch (error) {
                 showError(registerError, getAuthErrorMessage(error.code));
                 
                 // Restaurer le bouton
-                submitRegister.innerHTML = '<i class="fas fa-user-plus"></i> Créer un compte';
+                submitRegister.innerHTML = '<i class="fas fa-user-plus"></i> ' + translations[currentLanguage].createAccountText;
                 submitRegister.disabled = false;
             }
         }
@@ -1607,6 +2137,7 @@
                 maxLevel: 1,
                 sponsor: sponsorUsername,
                 sponsoredUsers: [],
+                referralEarnings: 0,
                 createdAt: new Date().toISOString(),
                 lastLogin: new Date().toISOString()
             };
@@ -1648,7 +2179,7 @@
         async function logoutUser() {
             try {
                 await firebaseFunctions.signOut(auth);
-                showModalAlert('Vous avez été déconnecté!', 'info');
+                showModalAlert(translations[currentLanguage].logoutSuccess, 'info');
             } catch (error) {
                 console.error('Erreur de déconnexion:', error);
             }
@@ -1681,13 +2212,21 @@
                         sponsorInfo.style.display = 'none';
                     }
                     
+                    // Afficher la section de parrainage avec le code de l'utilisateur
+                    if (currentUserData.username) {
+                        referralCode.textContent = currentUserData.username;
+                        referralCount.textContent = currentUserData.sponsoredUsers ? currentUserData.sponsoredUsers.length : 0;
+                        referralEarnings.textContent = (currentUserData.referralEarnings || 0).toFixed(2);
+                        referralSection.style.display = 'block';
+                    }
+                    
                     // Désactiver le bouton de démarrage si l'utilisateur a des jetons non récupérés
                     startBtn.disabled = tokens > 0;
                     
                     // Vérifier si l'utilisateur a des jetons non récupérés au chargement
                     if (tokens > 0) {
                         setTimeout(() => {
-                            showModalAlert('Vous avez des jetons à récupérer!', 'warning');
+                            showModalAlert(translations[currentLanguage].mustRecoverAlert, 'warning');
                             scrollToRecoverButton();
                         }, 1000);
                     }
@@ -1839,7 +2378,7 @@
         async function handleSponsorRewards(sponsoredUserUsername, tokensEarned) {
             try {
                 // Trouver le parrain par nom d'utilisateur
-                const sponsorsQuery = firebaseFunctions.query(
+                const sponsorQuery = firebaseFunctions.query(
                     firebaseFunctions.collection(db, "users"),
                     firebaseFunctions.where("username", "==", sponsoredUserUsername)
                 );
@@ -1854,6 +2393,7 @@
                     // Mettre à jour les jetons du parrain
                     await firebaseFunctions.updateDoc(firebaseFunctions.doc(db, "users", sponsorDoc.id), {
                         tokens: (sponsorData.tokens || 0) + sponsorReward,
+                        referralEarnings: (sponsorData.referralEarnings || 0) + sponsorReward,
                         lastSponsorReward: {
                             from: currentUserData.username,
                             amount: sponsorReward,
@@ -1899,6 +2439,7 @@
             
             return errorMessages[errorCode] || 'Une erreur est survenue. Veuillez réessayer.';
         }
+        
     </script>
 </body>
 </html>
