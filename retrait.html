@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retrait - MonSite</title>
+    <!-- Firebase App & Services -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #e67e22;
+            --danger-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --orange-color: #ff6600;
+            --moov-color: #00aaff;
+            --mtn-color: #ffcc00;
+            --paypal-color: #003087;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 15px 0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .balance-info {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .balance-amount {
+            color: var(--success-color);
+            font-size: 1.4rem;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .method-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .method-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .method-card.active {
+            border-color: var(--secondary-color);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.2);
+        }
+        
+        .method-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .method-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+        
+        .method-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .method-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .conversion-info {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #555;
+            border-left: 3px solid var(--warning-color);
+        }
+        
+        .method-form {
+            padding: 20px;
+            display: none;
+        }
+        
+        .method-card.active .method-form {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .input-row .form-group {
+            flex: 1;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        .btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .info-box {
+            background: #e8f4fc;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .footer-nav {
+            margin-top: 15px;
+        }
+        
+        .footer-nav a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        
+        .footer-nav a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .modal h2 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .modal p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .conversion-details {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            text-align: left;
+        }
+        
+        .conversion-details p {
+            margin-bottom: 8px;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        
+        .modal-btn:hover {
+            background: #2980b9;
+        }
+        
+        .success-modal .modal-content {
+            border-top: 5px solid var(--success-color);
+        }
+        
+        .error-modal .modal-content {
+            border-top: 5px solid var(--danger-color);
+        }
+        
+        .warning-modal .modal-content {
+            border-top: 5px solid var(--warning-color);
+        }
+        
+        @media (max-width: 768px) {
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                justify-content: center;
+            }
+        }
+        
+        /* Couleurs spécifiques pour chaque méthode */
+        .method-card[data-method="orange"] .method-header {
+            background: rgba(255, 102, 0, 0.1);
+        }
+        
+        .method-card[data-method="moov"] .method-header {
+            background: rgba(0, 170, 255, 0.1);
+        }
+        
+        .method-card[data-method="mtn"] .method-header {
+            background: rgba(255, 204, 0, 0.1);
+        }
+        
+        .method-card[data-method="paypal"] .method-header {
+            background: rgba(0, 48, 135, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">MonSite</div>
+                <div class="nav-links">
+                    <a href="index.html">Accueil</a>
+                    <a href="#" class="active">Retrait</a>
+                    <a href="profile.html">Profil</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Mode de Retrait</h1>
+        <p class="subtitle">Choisissez votre méthode de retrait préférée et remplissez les informations nécessaires</p>
+        
+        <div class="balance-info">
+            Solde disponible: <span class="balance-amount" id="current-balance">Chargement...</span>
+        </div>
+        
+        <div class="payment-methods">
+            <!-- Orange Money -->
+            <div class="method-card" data-method="orange">
+                <div class="method-header">
+                    <img src="https://i.postimg.cc/L4qW1pgM/images-4.png" alt="Orange Money" class="method-logo">
+                    <h3 class="method-name">Orange Money</h3>
+                    <p class="method-description">Retrait vers votre compte Orange Money</p>
+                    <div class="conversion-info">
+                        Le montant en € sera converti en devise locale selon le taux du jour
+                    </div>
+                </div>
+                <div class="method-form">
+                    <form id="orange-form">
+                        <div class="input-row">
+                            <div class="form-group">
+                                <label for="orange-indicatif">Indicatif pays</label>
+                                <select id="orange-indicatif" name="indicatif" required>
+                                    <option value="">Sélectionnez un indicatif</option>
+                                    <!-- Les options seront ajoutées par JavaScript -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="orange-number">Numéro de téléphone</label>
+                                <input type="tel" id="orange-number" name="phone" placeholder="Ex: 0701010101" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn" id="orange-submit">Confirmer le retrait</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Moov Money -->
+            <div class="method-card" data-method="moov">
+                <div class="method-header">
+                    <img src="https://i.postimg.cc/cJ2RqVxx/images-5.png" alt="Moov Money" class="method-logo">
+                    <h3 class="method-name">Moov Money</h3>
+                    <p class="method-description">Retrait vers votre compte Moov Money</p>
+                    <div class="conversion-info">
+                        Le montant en € sera converti en devise locale selon le taux du jour
+                    </div>
+                </div>
+                <div class="method-form">
+                    <form id="moov-form">
+                        <div class="input-row">
+                            <div class="form-group">
+                                <label for="moov-indicatif">Indicatif pays</label>
+                                <select id="moov-indicatif" name="indicatif" required>
+                                    <option value="">Sélectionnez un indicatif</option>
+                                    <!-- Les options seront ajoutées par JavaScript -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="moov-number">Numéro de téléphone</label>
+                                <input type="tel" id="moov-number" name="phone" placeholder="Ex: 0701010101" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn" id="moov-submit">Confirmer le retrait</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- MTN Money -->
+            <div class="method-card" data-method="mtn">
+                <div class="method-header">
+                    <img src="https://i.postimg.cc/MHDf8Sr/images-6.png" alt="MTN Money" class="method-logo">
+                    <h3 class="method-name">MTN Money</h3>
+                    <p class="method-description">Retrait vers votre compte MTN Mobile Money</p>
+                    <div class="conversion-info">
+                        Le montant en € sera converti en devise locale selon le taux du jour
+                    </div>
+                </div>
+                <div class="method-form">
+                    <form id="mtn-form">
+                        <div class="input-row">
+                            <div class="form-group">
+                                <label for="mtn-indicatif">Indicatif pays</label>
+                                <select id="mtn-indicatif" name="indicatif" required>
+                                    <option value="">Sélectionnez un indicatif</option>
+                                    <!-- Les options seront ajoutées par JavaScript -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="mtn-number">Numéro de téléphone</label>
+                                <input type="tel" id="mtn-number" name="phone" placeholder="Ex: 0701010101" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn" id="mtn-submit">Confirmer le retrait</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- PayPal -->
+            <div class="method-card" data-method="paypal">
+                <div class="method-header">
+                    <img src="https://i.postimg.cc/y8ht8ygz/paypal-marca.png" alt="PayPal" class="method-logo">
+                    <h3 class="method-name">PayPal</h3>
+                    <p class="method-description">Retrait vers votre compte PayPal</p>
+                </div>
+                <div class="method-form">
+                    <form id="paypal-form">
+                        <div class="form-group">
+                            <label for="paypal-email">Adresse e-mail</label>
+                            <input type="email" id="paypal-email" name="email" placeholder="votre@email.com" required>
+                        </div>
+                        <button type="submit" class="btn" id="paypal-submit">Confirmer le retrait</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <div class="info-title">Informations importantes</div>
+            <p>Les retraits sont traités dans un délai de 24 à 48 heures. Veuillez vérifier soigneusement les informations saisies avant de confirmer votre retrait. Aucun remboursement ne sera possible en cas d'erreur.</p>
+            <p><strong>Conversion de devise :</strong> Pour les retraits Orange Money, Moov Money et MTN Money, le montant en euros sera automatiquement converti dans la devise locale selon le taux de change en vigueur.</p>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 MonSite. Tous droits réservés.</p>
+            <div class="footer-nav">
+                <a href="index.html">Accueil</a>
+                <a href="#">Retrait</a>
+                <a href="contact.html">Contact</a>
+                <a href="help.html">Aide</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="success-modal" class="modal success-modal">
+        <div class="modal-content">
+            <h2>Demande envoyée avec succès!</h2>
+            <p id="success-message">Votre demande de retrait a été envoyée avec succès. Elle sera traitée dans les 24 heures.</p>
+            <div class="conversion-details" id="conversion-details">
+                <!-- Les détails de conversion seront ajoutés ici -->
+            </div>
+            <button class="modal-btn" onclick="closeModal('success-modal')">Fermer</button>
+        </div>
+    </div>
+    
+    <div id="error-modal" class="modal error-modal">
+        <div class="modal-content">
+            <h2>Erreur</h2>
+            <p id="error-message">Une erreur s'est produite lors du traitement de votre demande.</p>
+            <button class="modal-btn" onclick="closeModal('error-modal')">Fermer</button>
+        </div>
+    </div>
+    
+    <div id="warning-modal" class="modal warning-modal">
+        <div class="modal-content">
+            <h2>Solde insuffisant</h2>
+            <p id="warning-message">Le retrait minimum est de 100 €. Votre solde actuel est insuffisant.</p>
+            <button class="modal-btn" onclick="closeModal('warning-modal')">Fermer</button>
+        </div>
+    </div>
+
+    <script>
+        // Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7ePIu7x4KbojvUD47DWSKbuqH5nzE5uc",
+            authDomain: "laafi-bf.firebaseapp.com",
+            projectId: "laafi-bf",
+            storageBucket: "laafi-bf.firebasestorage.app",
+            messagingSenderId: "837012050847",
+            appId: "1:837012050847:web:f7eae39f1a985b3596e3aa",
+            measurementId: "G-W6HHK2WTVF"
+        };
+        
+        // Initialiser Firebase 
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // Variables globales
+        let currentUser = null;
+        let userBalance = 0;
+        const MIN_WITHDRAWAL = 100;
+        
+        // Taux de change approximatifs (à remplacer par des taux réels si possible)
+        const exchangeRates = {
+            "XOF": 655,  // Franc CFA (Afrique de l'Ouest)
+            "XAF": 655,  // Franc CFA (Afrique Centrale)
+            "GHS": 12.5, // Cedi ghanéen
+            "NGN": 1500, // Naira nigérian
+            "USD": 1.08, // Dollar américain
+            "GBP": 0.85  // Livre sterling
+        };
+        
+        // Correspondance pays -> devise
+        const countryCurrencies = {
+            "+225": "XOF", // Côte d'Ivoire
+            "+223": "XOF", // Mali
+            "+226": "XOF", // Burkina Faso
+            "+227": "XOF", // Niger
+            "+228": "XOF", // Togo
+            "+229": "XOF", // Bénin
+            "+237": "XAF", // Cameroun
+            "+233": "GHS", // Ghana
+            "+234": "NGN", // Nigeria
+            "+256": "UGX", // Ouganda
+            "+254": "KES", // Kenya
+            "+255": "TZS"  // Tanzanie
+        };
+        
+        // Liste complète des indicatifs par pays
+        const countryCodes = [
+            { name: "Afghanistan", code: "+93", currency: "AFN" },
+            { name: "Afrique du Sud", code: "+27", currency: "ZAR" },
+            { name: "Albanie", code: "+355", currency: "ALL" },
+            { name: "Algérie", code: "+213", currency: "DZD" },
+            { name: "Allemagne", code: "+49", currency: "EUR" },
+            { name: "Andorre", code: "+376", currency: "EUR" },
+            { name: "Angola", code: "+244", currency: "AOA" },
+            { name: "Antigua-et-Barbuda", code: "+1-268", currency: "XCD" },
+            { name: "Arabie saoudite", code: "+966", currency: "SAR" },
+            { name: "Argentine", code: "+54", currency: "ARS" },
+            { name: "Arménie", code: "+374", currency: "AMD" },
+            { name: "Australie", code: "+61", currency: "AUD" },
+            { name: "Autriche", code: "+43", currency: "EUR" },
+            { name: "Azerbaïdjan", code: "+994", currency: "AZN" },
+            { name: "Bahamas", code: "+1-242", currency: "BSD" },
+            { name: "Bahreïn", code: "+973", currency: "BHD" },
+            { name: "Bangladesh", code: "+880", currency: "BDT" },
+            { name: "Barbade", code: "+1-246", currency: "BBD" },
+            { name: "Bélarus", code: "+375", currency: "BYN" },
+            { name: "Belgique", code: "+32", currency: "EUR" },
+            { name: "Belize", code: "+501", currency: "BZD" },
+            { name: "Bénin", code: "+229", currency: "XOF" },
+            { name: "Bhoutan", code: "+975", currency: "BTN" },
+            { name: "Bolivie", code: "+591", currency: "BOB" },
+            { name: "Bosnie-Herzégovine", code: "+387", currency: "BAM" },
+            { name: "Botswana", code: "+267", currency: "BWP" },
+            { name: "Brésil", code: "+55", currency: "BRL" },
+            { name: "Brunei", code: "+673", currency: "BND" },
+            { name: "Bulgarie", code: "+359", currency: "BGN" },
+            { name: "Burkina Faso", code: "+226", currency: "XOF" },
+            { name: "Burundi", code: "+257", currency: "BIF" },
+            { name: "Cambodge", code: "+855", currency: "KHR" },
+            { name: "Cameroun", code: "+237", currency: "XAF" },
+            { name: "Canada", code: "+1", currency: "CAD" },
+            { name: "Cap-Vert", code: "+238", currency: "CVE" },
+            { name: "République centrafricaine", code: "+236", currency: "XAF" },
+            { name: "Chili", code: "+56", currency: "CLP" },
+            { name: "Chine", code: "+86", currency: "CNY" },
+            { name: "Chypre", code: "+357", currency: "EUR" },
+            { name: "Colombie", code: "+57", currency: "COP" },
+            { name: "Comores", code: "+269", currency: "KMF" },
+            { name: "Congo", code: "+242", currency: "XAF" },
+            { name: "Congo (RDC)", code: "+243", currency: "CDF" },
+            { name: "Corée du Nord", code: "+850", currency: "KPW" },
+            { name: "Corée du Sud", code: "+82", currency: "KRW" },
+            { name: "Costa Rica", code: "+506", currency: "CRC" },
+            { name: "Côte d'Ivoire", code: "+225", currency: "XOF" },
+            { name: "Croatie", code: "+385", currency: "EUR" },
+            { name: "Cuba", code: "+53", currency: "CUP" },
+            { name: "Danemark", code: "+45", currency: "DKK" },
+            { name: "Djibouti", code: "+253", currency: "DJF" },
+            { name: "Dominique", code: "+1-767", currency: "XCD" },
+            { name: "Égypte", code: "+20", currency: "EGP" },
+            { name: "Émirats arabes unis", code: "+971", currency: "AED" },
+            { name: "Équateur", code: "+593", currency: "USD" },
+            { name: "Érythrée", code: "+291", currency: "ERN" },
+            { name: "Espagne", code: "+34", currency: "EUR" },
+            { name: "Estonie", code: "+372", currency: "EUR" },
+            { name: "Eswatini", code: "+268", currency: "SZL" },
+            { name: "États-Unis", code: "+1", currency: "USD" },
+            { name: "Éthiopie", code: "+251", currency: "ETB" },
+            { name: "Fidji", code: "+679", currency: "FJD" },
+            { name: "Finlande", code: "+358", currency: "EUR" },
+            { name: "France", code: "+33", currency: "EUR" },
+            { name: "Gabon", code: "+241", currency: "XAF" },
+            { name: "Gambie", code: "+220", currency: "GMD" },
+            { name: "Géorgie", code: "+995", currency: "GEL" },
+            { name: "Ghana", code: "+233", currency: "GHS" },
+            { name: "Grèce", code: "+30", currency: "EUR" },
+            { name: "Grenade", code: "+1-473", currency: "XCD" },
+            { name: "Guatemala", code: "+502", currency: "GTQ" },
+            { name: "Guinée", code: "+224", currency: "GNF" },
+            { name: "Guinée équatoriale", code: "+240", currency: "XAF" },
+            { name: "Guinée-Bissau", code: "+245", currency: "XOF" },
+            { name: "Guyana", code: "+592", currency: "GYD" },
+            { name: "Haïti", code: "+509", currency: "HTG" },
+            { name: "Honduras", code: "+504", currency: "HNL" },
+            { name: "Hongrie", code: "+36", currency: "HUF" },
+            { name: "Inde", code: "+91", currency: "INR" },
+            { name: "Indonésie", code: "+62", currency: "IDR" },
+            { name: "Irak", code: "+964", currency: "IQD" },
+            { name: "Iran", code: "+98", currency: "IRR" },
+            { name: "Irlande", code: "+353", currency: "EUR" },
+            { name: "Islande", code: "+354", currency: "ISK" },
+            { name: "Israël", code: "+972", currency: "ILS" },
+            { name: "Italie", code: "+39", currency: "EUR" },
+            { name: "Jamaïque", code: "+1-876", currency: "JMD" },
+            { name: "Japon", code: "+81", currency: "JPY" },
+            { name: "Jordanie", code: "+962", currency: "JOD" },
+            { name: "Kazakhstan", code: "+7", currency: "KZT" },
+            { name: "Kenya", code: "+254", currency: "KES" },
+            { name: "Kirghizistan", code: "+996", currency: "KGS" },
+            { name: "Kiribati", code: "+686", currency: "AUD" },
+            { name: "Koweït", code: "+965", currency: "KWD" },
+            { name: "Laos", code: "+856", currency: "LAK" },
+            { name: "Lesotho", code: "+266", currency: "LSL" },
+            { name: "Lettonie", code: "+371", currency: "EUR" },
+            { name: "Liban", code: "+961", currency: "LBP" },
+            { name: "Liberia", code: "+231", currency: "LRD" },
+            { name: "Libye", code: "+218", currency: "LYD" },
+            { name: "Liechtenstein", code: "+423", currency: "CHF" },
+            { name: "Lituanie", code: "+370", currency: "EUR" },
+            { name: "Luxembourg", code: "+352", currency: "EUR" },
+            { name: "Madagascar", code: "+261", currency: "MGA" },
+            { name: "Malaisie", code: "+60", currency: "MYR" },
+            { name: "Malawi", code: "+265", currency: "MWK" },
+            { name: "Maldives", code: "+960", currency: "MVR" },
+            { name: "Mali", code: "+223", currency: "XOF" },
+            { name: "Malte", code: "+356", currency: "EUR" },
+            { name: "Maroc", code: "+212", currency: "MAD" },
+            { name: "Marshall", code: "+692", currency: "USD" },
+            { name: "Maurice", code: "+230", currency: "MUR" },
+            { name: "Mauritanie", code: "+222", currency: "MRU" },
+            { name: "Mexique", code: "+52", currency: "MXN" },
+            { name: "Micronésie", code: "+691", currency: "USD" },
+            { name: "Moldavie", code: "+373", currency: "MDL" },
+            { name: "Monaco", code: "+377", currency: "EUR" },
+            { name: "Mongolie", code: "+976", currency: "MNT" },
+            { name: "Monténégro", code: "+382", currency: "EUR" },
+            { name: "Mozambique", code: "+258", currency: "MZN" },
+            { name: "Myanmar", code: "+95", currency: "MMK" },
+            { name: "Namibie", code: "+264", currency: "NAD" },
+            { name: "Nauru", code: "+674", currency: "AUD" },
+            { name: "Népal", code: "+977", currency: "NPR" },
+            { name: "Nicaragua", code: "+505", currency: "NIO" },
+            { name: "Niger", code: "+227", currency: "XOF" },
+            { name: "Nigéria", code: "+234", currency: "NGN" },
+            { name: "Norvège", code: "+47", currency: "NOK" },
+            { name: "Nouvelle-Zélande", code: "+64", currency: "NZD" },
+            { name: "Oman", code: "+968", currency: "OMR" },
+            { name: "Ouganda", code: "+256", currency: "UGX" },
+            { name: "Ouzbékistan", code: "+998", currency: "UZS" },
+            { name: "Pakistan", code: "+92", currency: "PKR" },
+            { name: "Palaos", code: "+680", currency: "USD" },
+            { name: "Palestine", code: "+970", currency: "ILS" },
+            { name: "Panama", code: "+507", currency: "PAB" },
+            { name: "Papouasie-Nouvelle-Guinée", code: "+675", currency: "PGK" },
+            { name: "Paraguay", code: "+595", currency: "PYG" },
+            { name: "Pays-Bas", code: "+31", currency: "EUR" },
+            { name: "Pérou", code: "+51", currency: "PEN" },
+            { name: "Philippines", code: "+63", currency: "PHP" },
+            { name: "Pologne", code: "+48", currency: "PLN" },
+            { name: "Portugal", code: "+351", currency: "EUR" },
+            { name: "Qatar", code: "+974", currency: "QAR" },
+            { name: "Roumanie", code: "+40", currency: "RON" },
+            { name: "Royaume-Uni", code: "+44", currency: "GBP" },
+            { name: "Russie", code: "+7", currency: "RUB" },
+            { name: "Rwanda", code: "+250", currency: "RWF" },
+            { name: "Saint-Christophe-et-Niévès", code: "+1-869", currency: "XCD" },
+            { name: "Sainte-Lucie", code: "+1-758", currency: "XCD" },
+            { name: "Saint-Marin", code: "+378", currency: "EUR" },
+            { name: "Saint-Vincent-et-les-Grenadines", code: "+1-784", currency: "XCD" },
+            { name: "Salomon", code: "+677", currency: "SBD" },
+            { name: "Salvador", code: "+503", currency: "USD" },
+            { name: "Samoa", code: "+685", currency: "WST" },
+            { name: "Sao Tomé-et-Principe", code: "+239", currency: "STN" },
+            { name: "Sénégal", code: "+221", currency: "XOF" },
+            { name: "Serbie", code: "+381", currency: "RSD" },
+            { name: "Seychelles", code: "+248", currency: "SCR" },
+            { name: "Sierra Leone", code: "+232", currency: "SLL" },
+            { name: "Singapour", code: "+65", currency: "SGD" },
+            { name: "Slovaquie", code: "+421", currency: "EUR" },
+            { name: "Slovénie", code: "+386", currency: "EUR" },
+            { name: "Somalie", code: "+252", currency: "SOS" },
+            { name: "Soudan", code: "+249", currency: "SDG" },
+            { name: "Soudan du Sud", code: "+211", currency: "SSP" },
+            { name: "Sri Lanka", code: "+94", currency: "LKR" },
+            { name: "Suède", code: "+46", currency: "SEK" },
+            { name: "Suisse", code: "+41", currency: "CHF" },
+            { name: "Suriname", code: "+597", currency: "SRD" },
+            { name: "Syrie", code: "+963", currency: "SYP" },
+            { name: "Tadjikistan", code: "+992", currency: "TJS" },
+            { name: "Tanzanie", code: "+255", currency: "TZS" },
+            { name: "Tchad", code: "+235", currency: "XAF" },
+            { name: "République tchèque", code: "+420", currency: "CZK" },
+            { name: "Thaïlande", code: "+66", currency: "THB" },
+            { name: "Timor oriental", code: "+670", currency: "USD" },
+            { name: "Togo", code: "+228", currency: "XOF" },
+            { name: "Tonga", code: "+676", currency: "TOP" },
+            { name: "Trinité-et-Tobago", code: "+1-868", currency: "TTD" },
+            { name: "Tunisie", code: "+216", currency: "TND" },
+            { name: "Turkménistan", code: "+993", currency: "TMT" },
+            { name: "Turquie", code: "+90", currency: "TRY" },
+            { name: "Tuvalu", code: "+688", currency: "AUD" },
+            { name: "Ukraine", code: "+380", currency: "UAH" },
+            { name: "Uruguay", code: "+598", currency: "UYU" },
+            { name: "Vanuatu", code: "+678", currency: "VUV" },
+            { name: "Vatican", code: "+379", currency: "EUR" },
+            { name: "Venezuela", code: "+58", currency: "VES" },
+            { name: "Viêt Nam", code: "+84", currency: "VND" },
+            { name: "Yémen", code: "+967", currency: "YER" },
+            { name: "Zambie", code: "+260", currency: "ZMW" },
+            { name: "Zimbabwe", code: "+263", currency: "ZWL" }
+        ];
+        
+        // Fonctions pour gérer les modals
+        function showModal(modalId, message = '', conversionHtml = '') {
+            const modal = document.getElementById(modalId);
+            if (message && modal.querySelector('p')) {
+                modal.querySelector('p').textContent = message;
+            }
+            if (conversionHtml && modal.querySelector('#conversion-details')) {
+                modal.querySelector('#conversion-details').innerHTML = conversionHtml;
+            }
+            modal.style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Fonction pour calculer la conversion
+        function calculateConversion(amountEur, countryCode) {
+            const country = countryCodes.find(c => c.code === countryCode);
+            if (!country) return null;
+            
+            const currency = country.currency;
+            const rate = exchangeRates[currency];
+            
+            if (!rate) return null;
+            
+            const localAmount = amountEur * rate;
+            return {
+                currency: currency,
+                rate: rate,
+                amount: localAmount.toFixed(2)
+            };
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Remplir les listes d'indicatifs
+            const selectElements = document.querySelectorAll('select[name="indicatif"]');
+            selectElements.forEach(select => {
+                countryCodes.forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country.code;
+                    option.textContent = `${country.name} (${country.code})`;
+                    select.appendChild(option);
+                });
+            });
+            
+            // Vérifier l'état d'authentification 
+            auth.onAuthStateChanged(function(user) {
+                if (user) {
+                    currentUser = user;
+                    loadUserBalance();
+                } else {
+                    // Rediriger vers la page de connexion si non authentifié
+                    window.location.href = 'login.html';
+                }
+            });
+            
+            const methodCards = document.querySelectorAll('.method-card');
+            
+            // Gérer la sélection des méthodes de paiement
+            methodCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Désactiver toutes les cartes
+                    methodCards.forEach(c => c.classList.remove('active'));
+                    
+                    // Activer la carte cliquée
+                    this.classList.add('active');
+                });
+            });
+            
+            // Fonction pour charger le solde de l'utilisateur
+            function loadUserBalance() {
+                if (!currentUser) return;
+                
+                db.collection('users').doc(currentUser.uid).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        userBalance = userData.tokensRecovered || 0;
+                        
+                        // Mettre à jour l'affichage du solde
+                        document.getElementById('current-balance').textContent = userBalance + ' €';
+                    } else {
+                        console.log("Aucun document utilisateur trouvé!");
+                    }
+                })
+                .catch(error => {
+                    console.error("Erreur lors du chargement du solde:", error);
+                });
+            }
+            
+            // Gérer la soumission des formulaires
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Vérifier le solde avant soumission
+                    if (userBalance < MIN_WITHDRAWAL) {
+                        const missingAmount = MIN_WITHDRAWAL - userBalance;
+                        const message = `Le retrait minimum est de ${MIN_WITHDRAWAL} €. Votre solde actuel est de ${userBalance} €. Il vous manque ${missingAmount} € pour effectuer un retrait.`;
+                        showModal('warning-modal', message);
+                        return;
+                    }
+                    
+                    // Récupérer la méthode de paiement
+                    const method = this.closest('.method-card').dataset.method;
+                    let message = '';
+                    let conversionHtml = '';
+                    
+                    if (method === 'paypal') {
+                        const email = this.querySelector('input[type="email"]').value;
+                        message = `Retrait PayPal demandé vers: ${email}`;
+                    } else {
+                        const indicatif = this.querySelector('select').value;
+                        const phone = this.querySelector('input[type="tel"]').value;
+                        message = `Retrait ${method.toUpperCase()} demandé vers: ${indicatif} ${phone}`;
+                        
+                        // Calculer la conversion pour les méthodes mobiles
+                        const conversion = calculateConversion(userBalance, indicatif);
+                        if (conversion) {
+                            conversionHtml = `
+                                <p><strong>Détails de conversion:</strong></p>
+                                <p>Montant en euros: ${userBalance} €</p>
+                                <p>Taux de change: 1 € = ${conversion.rate} ${conversion.currency}</p>
+                                <p>Montant reçu: ${conversion.amount} ${conversion.currency}</p>
+                                <p><em>Le taux de change est indicatif et peut varier</em></p>
+                            `;
+                        }
+                    }
+                    
+                    message += `\n\nMontant: ${userBalance} €\n\nCette demande sera traitée dans les 24 heures.`;
+                    
+                    // Afficher la confirmation dans un modal
+                    showModal('success-modal', message, conversionHtml);
+                    
+                    // Réinitialiser le formulaire
+                    this.reset();
+                    
+                    // Ici, vous ajouteriez le code pour enregistrer la demande dans Firestore
+                    // et déduire le montant du solde de l'utilisateur
+                });
+            });
+        });
+    </script>
+</body>
+</html>
